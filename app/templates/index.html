@@ -204,12 +204,25 @@
     var swipeBE = document.getElementById('swipe-box')
     var swipeBox = new Hammer(swipeBE);
     
-     swipeBox.on("swipeleft", function(event){
+     swipeBox.on("swipeleft", function(ev){
+       if(parseInt($("#swipe-box").css("margin-right").replace('px', ''))>=600){
+          $("#swipe-box").animate({"margin-right": '600px'});
+         return;
+       }
+         
+            $("#swipe-box").animate({"margin-right": '+='+(-1)*ev.velocityX*200});
+      
+       
        
      })
     
-    swipeBox.on("rightleft", function(event){
-       
+    swipeBox.on("swiperight", function(ev){
+        if(parseInt($("#swipe-box").css("margin-right").replace('px', ''))<=-600){
+          $("#swipe-box").animate({"margin-right": '-600px'});
+         return;
+       }
+         
+            $("#swipe-box").animate({"margin-right": '-='+ev.velocityX*200});
      })
     
     
