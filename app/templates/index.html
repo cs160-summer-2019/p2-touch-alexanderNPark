@@ -85,6 +85,141 @@
 	</div>
 	<script>
 	  // your solution here
+    /*
+    
+    var hammerTime = new Hammer(document.getElementById('rotate-box'))
+    //hammerTime.get("rotate").set({ enable: true});
+    hammerTime.get('pinch').set({ enable: true });
+  // hammerTime.add(new Hammer.Rotate({ threshold: 0 })).recognizeWith(hammerTime.get('pan'));
+    hammerTime.on('rotate', function(ev) {
+      event.preventDefault();
+      event.stopPropagation() 
+	     //requestElementUpdate();
+    });
+  */
+    
+    
+    var mc = new Hammer(document.getElementById('rotate-box'));
+    mc.get('rotate').set({enable:true})
+    mc.on('rotate', function(ev){
+      
+      elem = ev.target  
+      elem.style.transform = "rotate("+ev.rotation+"deg)"
+    });
+
+    
+    
+    
+   panBE = document.getElementById('pan-box')
+    panBE.style.position = "absolute"
+   var panBox = new Hammer(panBE, {
+  inputClass: Hammer.SUPPORT_POINTER_EVENTS ? Hammer.PointerEventInput : Hammer.TouchInput
+});
+    
+   panBox.get('pan').set({ direction: Hammer.DIRECTION_ALL, threshold: 0}); 
+   
+    //inspiration from https://codepen.io/bladnman/pen/LEWYYN
+   var prevX = 0;
+   var prevY = 0;
+   var isDragging = false;
+    
+   panBox.on('pan',function(ev){
+     
+        var elem = ev.target;
+        if ( ! isDragging ) {
+            isDragging = true;
+            prevX = elem.offsetLeft;
+            prevY = elem.offsetTop;
+            
+        }
+        posX = ev.deltaX + prevX;
+        posY = ev.deltaY + prevY;
+
+       
+        elem.style.left = posX + "px";
+        elem.style.top = posY + "px";
+        
+        if (ev.isFinal) {
+            isDragging = false;
+        }
+   });
+    
+    var pressBE = document.getElementById('press-box')
+    var pressBox = new Hammer(pressBE);
+    
+    pressBox.on('press',function(ev){
+       $("#press-box").css({"border": "10px solid red"});
+     
+    })
+    
+     pressBox.on('pressup',function(ev){
+      
+        $("#press-box").css("border","none");
+        
+    })
+    
+    var pinchBE = document.getElementById('pinch-box')
+    var pinchBox = new Hammer(pinchBE);
+    
+    
+   
+   pinchBox.get('pinch').set({enable:true})
+   pinchBox.on('pinchout',function(ev){
+         var elem = ev.target;
+         
+          if($("#pinch-box").width()>300 && $("#pinch-box").height()>300){
+            return;
+          }
+         $("#pinch-box").width($("#pinch-box").width()+2);
+          $("#pinch-box").height($("#pinch-box").height()+2);
+        
+   });
+    
+     pinchBox.on('pinchin',function(ev){
+         var elem = ev.target;
+         if($("#pinch-box").width()<100 || $("#pinch-box").height()<100){
+            return;
+          }
+          $("#pinch-box").width($("#pinch-box").width()-2);
+          $("#pinch-box").height($("#pinch-box").height()-2);
+        
+   });
+    
+    
+    var tapBE = document.getElementById('tap-box')
+    var tapBox = new Hammer(tapBE);
+    
+    var selected = false;
+    tapBox.on("tap", function(event){
+      if(selected){
+        selected = !selected
+          $("#tap-box").css({"background": "#FF00FF"});
+        
+      }else{
+        selected = !selected
+         $("#tap-box").css({"background": " #7ce6df"});
+      }
+    })
+    
+    var swipeBE = document.getElementById('swipe-box')
+    var swipeBox = new Hammer(swipeBE);
+    
+     swipeBox.on("swipeleft", function(event){
+       
+     })
+    
+    swipeBox.on("rightleft", function(event){
+       
+     })
+    
+    
+    
+    
+    
+    
+   
+
+    
   </script>
 </body>
 </html>
